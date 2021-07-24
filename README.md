@@ -12,11 +12,11 @@ First you can see all items for selected set, base on the amount you own the tex
 
 Second part of displayed information shows possible profits by buying at market value and getting points for them in museum. 
 
-..*One set shows values for only one set of items.
+- One set shows values for only one set of items.
 
-..*Max set show values for selling number off sets corresponding to the item you have most (most green item).
+- Max set show values for selling number off sets corresponding to the item you have most (most green item).
 
-..*Current set is only visible when you can exchange at leas one set at the museum.
+- Current set is only visible when you can exchange at leas one set at the museum.
 
 
 
