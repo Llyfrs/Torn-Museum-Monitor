@@ -11,7 +11,16 @@ init(autoreset=True)
 
 API_key = "" #Here comes your API key 
 
-Collectible = namedtuple('Collectible',['name','quantity','market_price','place'],defaults=(None,))
+if API_key == "": #In case user doesn't want to edit code. 
+    print("You are missing API key, pleas enter it. \nIf you don't want to enter your key every time you run the program you can insert it to the code and this message will get skiped")
+    API_key = input("Your API key:")
+
+
+#Structure to hold multiple information in one variable/object
+#The object holds name of the item the amount of the item in users inventory market price of the item and place where you can buy this item
+#for example you can buy Monkey Plushie in UK 
+
+Collectible = namedtuple('Collectible',['name','quantity','market_price','place'],defaults=(None,)) 
 
 def get_request(url): #Code that waits and retryes request when error ocurs (most comonly running out off AP calls) 
     json_info = requests.get(url).json()
@@ -23,7 +32,7 @@ def get_request(url): #Code that waits and retryes request when error ocurs (mos
             json_info = requests.get(url).json()
     return json_info
 
-point_amount = 10 #The amount off points you get from one set right now ten for both Plushies and Flowers but if other sets are added this needs to be changed accordingly
+point_amount = 10 #The amount off points you get from one set right now is ten for both Plushies and Flowers but if other sets are added this needs to be changed accordingly
 
 Plushies = ["Jaguar Plushie", "Lion Plushie", "Panda Plushie", "Monkey Plushie", "Chamois Plushie" , "Wolverine Plushie", "Nessie Plushie", "Red Fox Plushie", "Camel Plushie", "Kitten Plushie", "Teddy Bear Plushie", "Sheep Plushie", "Stingray Plushie"]
 
@@ -31,7 +40,7 @@ Plushies_Place = ["Mexico","Africa","China","Argentina","Switzerland","Canada","
 
 Flowers = ["Dahlia","Orchid","African Violet","Cherry Blossom","Peony","Ceibo Flower","Edelweiss","Crocus","Heather","Tribulus Omanense","Banana Orchid"]
 
-# Choosin witch set you want to monitor. 
+# Choosin witch set you want to monitor. P
 choice = input("1. Plushies \n2. Flowers\n:")
 
 if choice == "1":
@@ -42,8 +51,10 @@ elif choice == "2":
     pass
 
 del(choice)
+del(Plushies)
+del(Flowers)
 
-while(True): #Update loop 
+while(True): #Update loop that refershes every 30 seconds
 
     Collectibles = list()
 
@@ -51,13 +62,13 @@ while(True): #Update loop
 
     items = get_request("https://api.torn.com/torn/?selections=items&key=" + API_key).get("items")
 
-    for i, collectible in enumerate(museum_set):
+    for i, collectible in enumerate(museum_set): # Looks for items in you inventory and creates collectible object and adds it in to the list 
         if collectible in str(inventory):
             for item in inventory:
                 if item.get("name") == collectible:
                     Collectibles.append(Collectible(collectible,item.get("quantity"),item.get("market_price"),Plushies_Place[i]))
                     pass
-        else:
+        else: # in case user doesn't have any of the item in the inventory it needs to look up the market price in items API call 
 
             for item in items:
                 item = items.get(item)
