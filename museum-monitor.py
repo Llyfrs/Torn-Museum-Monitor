@@ -22,7 +22,7 @@ if API_key == "": #In case user doesn't want to edit code.
 
 Collectible = namedtuple('Collectible',['name','quantity','market_price','place'],defaults=(None,)) 
 
-def get_request(url): #Code that waits and retryes request when error ocurs (most comonly running out off AP calls) 
+def get_request(url): #Code that waits and retryes request when error occurs (most comonly running out off AP calls) 
     json_info = requests.get(url).json()
     
     while True:
@@ -40,7 +40,7 @@ Plushies_Place = ["Mexico","Africa","China","Argentina","Switzerland","Canada","
 
 Flowers = ["Dahlia","Orchid","African Violet","Cherry Blossom","Peony","Ceibo Flower","Edelweiss","Crocus","Heather","Tribulus Omanense","Banana Orchid"]
 
-# Choosin witch set you want to monitor. P
+# Choosin witch set you want to monitor.
 choice = input("1. Plushies \n2. Flowers\n:")
 
 if choice == "1":
@@ -79,8 +79,8 @@ while(True): #Update loop that refershes every 30 seconds
     del(items)
     del(inventory)
 
-    top_amount = 0
-    min_amount = 1000 # must start on a big number.
+    top_amount = 0 #Biggest number of one items users owns 
+    min_amount = 1000 # must start on a big number. Shows the lowest number of items user owns if not 0 that means user can exchange at leas one set 
 
     for item in Collectibles:
         if item.quantity > top_amount:
@@ -97,12 +97,12 @@ while(True): #Update loop that refershes every 30 seconds
     max_set_cost_market = 0
     current_set_cost_market = 0
 
+    #This si where individual items get printed with there respected color 
     for item in Collectibles:
         
         one_set_cost_market += item.market_price
         max_set_cost_market += item.market_price * top_amount
         current_set_cost_market += item.market_price * min_amount
-
         
         quantity = item.quantity
 
@@ -114,19 +114,21 @@ while(True): #Update loop that refershes every 30 seconds
             max_set_cost_complete += (top_amount-quantity) * item.market_price
             pass
         
-        R = round(144 * (quantity/float(top_amount)))
-        if quantity !=0 : R += 60
-        c = "\033[38;2;{};{};100m".format(255 - R, 51 + R)
+        #This part coolors items, the more items users has the more green it gets 
+        #To distinguish items that user doesn't own any there is a big jum in color from 0 to 1 number of items 
+        R = round(144 * (quantity/float(top_amount)))  #144 + 60 for jump + 51 witch is the based = 255 
+        if quantity !=0 : R += 60 # this is the jump
+        c = "\033[38;2;{};{};100m".format(255 - R, 51 + R) #Determines the color, might not work on windows terminal... 
 
-        report = c + "[" + str(quantity) + "]" + item.name + "\033[0m "
+        report = c + "[" + str(quantity) + "]" + item.name + "\033[0m " 
 
         print(report)
 
-
+    # Call to get point value, didn't find anywhere market value for points so it has to looks at all the points 
+    # that are soled atm and take price form the lowest as the market value
     points = get_request("https://api.torn.com/market/?selections=pointsmarket&key="+API_key).get("pointsmarket")
 
     point_value = 0
-
     for point in points:
         point_value = points.get(point).get("cost")
         break
@@ -138,6 +140,7 @@ while(True): #Update loop that refershes every 30 seconds
     current_set_cost_museum = point_value * point_amount * min_amount
 
     #Final report 
+    #Just a lot of text to print showing variables 
 
     print("\nOne set:")
     print("     Cost to complete:"+Fore.GREEN+" ${:,}".format(one_set_cost_complete))
@@ -156,6 +159,8 @@ while(True): #Update loop that refershes every 30 seconds
     if difference >= 0: print("     Difference:"+ Fore.GREEN + " ${:,}".format(difference))
     else: print("     Difference:"+ Fore.RED + " ${:,}".format(difference))
 
+    #Current sett is only shown when you can exchange at least one set at the museum 
+
     if min_amount != 0:
         print("\nCurrent set [{}] :".format(min_amount))
         print("     Worth on market: ${:,}".format(current_set_cost_market))
@@ -166,4 +171,8 @@ while(True): #Update loop that refershes every 30 seconds
 
         print("\n https://www.torn.com/museum.php \n")
     
-    time.sleep(30)
+    # updating the table every 30 second
+
+    # one update makes total of 3 calls since you get two updates per minute this program takes
+    # 6 API calls from the 100 available every minute (that's alright). 
+    time.sleep(30) 
