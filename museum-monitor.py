@@ -32,7 +32,8 @@ def get_request(url): #Code that waits and retryes request when error occurs (mo
             json_info = requests.get(url).json()
     return json_info
 
-point_amount = 10 #The amount off points you get from one set right now is ten for both Plushies and Flowers but if other sets are added this needs to be changed accordingly
+#The amount off points you get from one set right now is ten for both Plushies and Flowers but if other sets are added this needs to be changed accordingly
+point_amount = 10
 
 Plushies = ["Jaguar Plushie", "Lion Plushie", "Panda Plushie", "Monkey Plushie", "Chamois Plushie" , "Wolverine Plushie", "Nessie Plushie", "Red Fox Plushie", "Camel Plushie", "Kitten Plushie", "Teddy Bear Plushie", "Sheep Plushie", "Stingray Plushie"]
 
@@ -40,15 +41,65 @@ Plushies_Place = ["Mexico","Africa","China","Argentina","Switzerland","Canada","
 
 Flowers = ["Dahlia","Orchid","African Violet","Cherry Blossom","Peony","Ceibo Flower","Edelweiss","Crocus","Heather","Tribulus Omanense","Banana Orchid"]
 
-# Choosin witch set you want to monitor.
-choice = input("1. Plushies \n2. Flowers\n:")
+Coins = ["Leopard Coin", "Florin Coin","Gold Noble Coin"]
 
-if choice == "1":
-    museum_set = Plushies
-    pass
-elif choice == "2":
-    museum_set = Flowers
-    pass
+#After coins there isn't any real reason to use this program to track the amount of items in your inventory 
+#since you only need to track one but it can still tell you if is worth buying the item on the market for market price. 
+
+Buddha = ["Vairocana Buddha Sculpture"]
+
+Ganesha = ["Ganesha Sculpture"]
+
+Shabit = ["Shabti Sculpture"]
+
+Scripts = ["Quran Script : Ibn Masud", "Quran Script : Ubay Ibn Kab", "Quran Script : Ali"]
+
+Amulet = ["Egyptian Amulet"]
+
+# Choosing witch set you want to monitor.
+# If anybody knows how to write this less retarded feal free to let me know. 
+# Senet Game not included cuz it will break/make useles half of the program. 
+
+while(True):
+
+
+    choice = input("1. Plushies \n2. Flowers\n3. Medieval Coins\n4. Vairocana Buddha\n5. Ganesha Sculpture\n6. Shabit Sculpture\n7. Script's from the Quran\n8. Egyptian Amulet\n:")
+    os.system("clear")
+    if choice == "1":
+        museum_set = Plushies
+        pass
+    elif choice == "2":
+        museum_set = Flowers
+        pass
+    elif choice == "3":
+        museum_set = Coins
+        point_amount = 100
+        pass
+    elif choice == "4":
+        museum_set = Buddha
+        point_amount = 100
+        pass
+    elif choice == "5":
+        museum_set = Ganesha
+        point_amount = 250
+        pass
+    elif choice == "6":
+        museum_set = Shabit
+        point_amount = 500
+        pass
+    elif choice == "7":
+        museum_set = Scripts
+        point_amount = 1000
+        pass
+    elif choice == "8":
+        museum_set = Amulet
+        point_amount = 10000
+        pass
+    else:
+        print("{} is not recognized as a vallid input".format(choice))
+        print("Pleas try again\n")
+        continue
+    break
 
 del(choice)
 del(Plushies)
@@ -80,11 +131,14 @@ while(True): #Update loop that refershes every 30 seconds
     del(inventory)
 
     top_amount = 0 #Biggest number of one items users owns 
-    min_amount = 1000 # must start on a big number. Shows the lowest number of items user owns if not 0 that means user can exchange at leas one set 
 
     for item in Collectibles:
         if item.quantity > top_amount:
             top_amount = item.quantity
+
+    min_amount = top_amount
+
+    for item in Collectibles:
         if item.quantity < min_amount:
             min_amount = item.quantity
 
@@ -114,9 +168,11 @@ while(True): #Update loop that refershes every 30 seconds
             max_set_cost_complete += (top_amount-quantity) * item.market_price
             pass
         
+        
         #This part coolors items, the more items users has the more green it gets 
         #To distinguish items that user doesn't own any there is a big jum in color from 0 to 1 number of items 
-        R = round(144 * (quantity/float(top_amount)))  #144 + 60 for jump + 51 witch is the based = 255 
+        R = 0
+        if top_amount != 0 : R = round(144 * (quantity/float(top_amount)))  #144 + 60 for jump + 51 witch is the based = 255 
         if quantity !=0 : R += 60 # this is the jump
         c = "\033[38;2;{};{};100m".format(255 - R, 51 + R) #Determines the color, might not work on windows terminal... 
 
@@ -130,7 +186,7 @@ while(True): #Update loop that refershes every 30 seconds
 
     point_value = 0
     for point in points:
-        point_value = points.get(point).get("cost")
+        point_value = points.get(point).get("cost") #Carefull whe selling with the automatic price you will sell your points $100 bellow the market price. 
         break
 
     del(points)
