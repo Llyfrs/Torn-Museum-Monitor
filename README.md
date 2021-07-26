@@ -1,6 +1,16 @@
 ﻿# Torn-Museum-Monitor
 Python script for monitoring amount of items corresponding to certain museum set.
 
+## Installing
+
+For running this python script you will need colorama and request packages. You can install them using commands shown bellow. 
+
+```
+pip install colorama
+pip install request
+```
+alternatively you can use `envpip install` if you know what it is. 
+
 ## Usage 
 
 First you need to edit the code and insert your own API, its the first variable. If you don't edit the code you will be asked for the API key at the start of the application this will not save your API anywhere and will be asked every time you run the program.
