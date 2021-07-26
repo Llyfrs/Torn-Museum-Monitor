@@ -4,7 +4,8 @@ Python script for monitoring amount of items corresponding to certain museum set
 ## Usage 
 
 First you need to edit the code and insert your own API, its the first variable. If you don't edit the code you will be asked for the API key at the start of the application this will not save your API anywhere and will be asked every time you run the program.
-You can now run the script it will ask you to choose between plushie set and flower set. Choose one by pressing 1 or 2 and enter. (anything else will result in error right now). Now your have a loop running updating every 30 second your inventory.
+You can now run the script it will ask you to choose between plushie set and flower set. Choose one by pressing 1 or 2 and enter.
+Now your have a loop running updating every 30 second your inventory.
 
 ## Displayed information
 
