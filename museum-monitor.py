@@ -3,7 +3,6 @@
 
 import requests
 import time
-import math
 import os
 from colorama import init, Fore, Back, Style
 from collections import namedtuple 
