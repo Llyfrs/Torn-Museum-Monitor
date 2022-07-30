@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-
 import requests
 import time
 import os
@@ -11,11 +10,10 @@ init(autoreset=True)
 API_key = "" #Here comes your API key 
 
 operating_system = os.name
-operating_system = "nt"
+#operating_system = "nt"
 # For coolors
 # posix - Linux
 # nt - Windows 
-
 
 
 if API_key == "": #In case user doesn't want to edit code. 
@@ -139,6 +137,9 @@ while(True): #Update loop that refershes every 30 seconds
 
     top_amount = 0 #Biggest number of one items users owns 
 
+    # With sorting this won't bee needed any more
+    # but that depends if I make sorting optionable or not 
+
     for item in Collectibles:
         if item.quantity > top_amount:
             top_amount = item.quantity
@@ -149,7 +150,11 @@ while(True): #Update loop that refershes every 30 seconds
         if item.quantity < min_amount:
             min_amount = item.quantity
 
-
+    inventory_value = 0
+    
+    for item in Collectibles:
+        inventory_value += item.quantity * item.market_price
+        
 
     change = True
 
@@ -231,8 +236,10 @@ while(True): #Update loop that refershes every 30 seconds
 
     #Final report 
     #Just a lot of text to print showing variables 
-
-    print("\nOne set:")
+    
+    print("\nInventory Value:" +Fore.GREEN+" ${:,}".format(inventory_value))
+    
+    print("\n\nOne set:")
     print("     Cost to complete:"+Fore.GREEN+" ${:,}".format(one_set_cost_complete))
     print("     Worth on market: ${:,}".format(one_set_cost_market))
     print("     Worth in museum: ${:,}".format(one_set_cost_museum))
