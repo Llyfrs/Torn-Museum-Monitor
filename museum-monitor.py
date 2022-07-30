@@ -58,7 +58,7 @@ Scripts = ["Quran Script : Ibn Masud", "Quran Script : Ubay Ibn Kab", "Quran Scr
 Amulet = ["Egyptian Amulet"]
 
 # Choosing witch set you want to monitor.
-# If anybody knows how to write this less retarded feal free to let me know. 
+# If anybody knows how to write this better feal free to let me know. 
 # Senet Game not included cuz it will break/make useles half of the program. 
 
 while(True):
@@ -205,8 +205,8 @@ while(True): #Update loop that refershes every 30 seconds
 
         print(report)
 
-    # Call to get point value, didn't find anywhere market value for points so it has to looks at all the points 
-    # that are soled atm and take price form the lowest as the market value
+    
+    #Grabs the average point value. 
     point_value = get_request("https://api.torn.com/torn/?selections=stats&key="+API_key).get("stats").get("points_averagecost")
 
     one_set_cost_museum = point_value * point_amount
