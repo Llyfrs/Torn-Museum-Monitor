@@ -207,14 +207,7 @@ while(True): #Update loop that refershes every 30 seconds
 
     # Call to get point value, didn't find anywhere market value for points so it has to looks at all the points 
     # that are soled atm and take price form the lowest as the market value
-    points = get_request("https://api.torn.com/market/?selections=pointsmarket&key="+API_key).get("pointsmarket")
-
-    point_value = 0
-    for point in points:
-        point_value = points.get(point).get("cost") #Carefull whe selling with the automatic price you will sell your points $100 bellow the market price. 
-        break
-
-    del(points)
+    point_value = get_request("https://api.torn.com/torn/?selections=stats&key="+API_key).get("stats").get("points_averagecost")
 
     one_set_cost_museum = point_value * point_amount
     max_set_cost_museum = point_value * point_amount * top_amount
@@ -224,6 +217,7 @@ while(True): #Update loop that refershes every 30 seconds
     #Just a lot of text to print showing variables 
     
     print("\nInventory Value:" +Fore.GREEN+" ${:,}".format(inventory_value))
+    print("Point Price: " +Fore.GREEN + "${:,}".format(point_value))
     
     print("\n\nOne set:")
     print("     Cost to complete:"+Fore.GREEN+" ${:,}".format(one_set_cost_complete))
