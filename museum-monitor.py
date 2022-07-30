@@ -9,11 +9,7 @@ init(autoreset=True)
 
 API_key = "" #Here comes your API key 
 
-operating_system = os.name
-#operating_system = "nt"
-# For coolors
-# posix - Linux
-# nt - Windows 
+
 
 
 if API_key == "": #In case user doesn't want to edit code. 
@@ -195,26 +191,16 @@ while(True): #Update loop that refershes every 30 seconds
             max_set_cost_complete += (top_amount-quantity) * item.market_price
             pass
         
-        if operating_system == "posix":
-            #This part coolors items, the more items users has the more green it gets 
-            #To distinguish items that user doesn't own any there is a big jum in color from 0 to 1 number of items 
-            R = 0
-            if top_amount != 0 : R = round(144 * (quantity/float(top_amount)))  #144 + 60 for jump + 51 witch is the based = 255 
-            if quantity !=0 : R += 60 # this is the jump
-            c = "\033[38;2;{};{};100m".format(255 - R, 51 + R) #Determines the color, might not work on windows terminal... 
-            pass
-        else:
-            # if quantity == 0:               c = Fore.LIGHTBLACK_EX
-            # elif quantity < top_amount*0.1: c = Fore.LIGHTRED_EX
-            # elif quantity < top_amount*0.2: c = Fore.LIGHTYELLOW_EX
-            # elif quantity < top_amount*0.4: c = Fore.YELLOW
-            # elif quantity < top_amount*0.6: c = Fore.LIGHTBLUE_EX
-            # elif quantity < top_amount:     c = Fore.LIGHTGREEN_EX
-            # elif quantity == top_amount:    c = Fore.GREEN
-            c = ""
-            pass
-                
 
+        #This part coolors items, the more items users has the more green it gets 
+        #To distinguish items that user doesn't own any there is a big jum in color from 0 to 1 number of items 
+        R = 0
+        if top_amount != 0 : R = round(144 * (quantity/float(top_amount)))  #144 + 60 for jump + 51 witch is the based = 255 
+        if quantity !=0 : R += 60 # this is the jump
+        c = "\033[38;2;{};{};100m".format(255 - R, 51 + R) #Determines the color, might not work on windows terminal... 
+
+
+                
         report = c + "[" + str(quantity) + "]" + item.name + "\033[0m " 
 
         print(report)
