@@ -4,48 +4,53 @@ import requests
 import time
 import os
 from colorama import init, Fore, Back, Style
-from collections import namedtuple 
+from collections import namedtuple
+
 init(autoreset=True)
 
-API_key = "" #Here comes your API key
+API_key = ""  # Here comes your API key
 
-
-
-
-if API_key == "": #In case user doesn't want to edit code. 
-    print("You are missing API key, pleas enter it. \nIf you don't want to enter your key every time you run the program you can insert it to the code and this message will get skiped")
+if API_key == "":  # In case user doesn't want to edit code.
+    print("You are missing API key, pleas enter it. \nIf you don't want to enter your key every time you run the "
+          "program you can insert it to the code and this message will get skiped")
     API_key = input("Your API key:")
 
+# Structure to hold multiple information in one variable/object The object holds name of the item the amount of the
+# item in users inventory market price of the item and place where you can buy this item for example you can buy
+# Monkey Plushie in UK
 
-#Structure to hold multiple information in one variable/object
-#The object holds name of the item the amount of the item in users inventory market price of the item and place where you can buy this item
-#for example you can buy Monkey Plushie in UK 
+Collectible = namedtuple('Collectible', ['name', 'quantity', 'market_price', 'place'], defaults=(None,))
 
-Collectible = namedtuple('Collectible',['name','quantity','market_price','place'],defaults=(None,)) 
 
-def get_request(url): #Code that waits and retryes request when error occurs (most comonly running out off AP calls) 
+def get_request(url):  # Code that waits and retryes request when error occurs (most comonly running out off AP calls)
     json_info = requests.get(url).json()
-    
+
     while True:
-            if json_info.get("error") == None:
-                break
-            time.sleep(5)
-            json_info = requests.get(url).json()
+        if json_info.get("error") == None:
+            break
+        time.sleep(5)
+        json_info = requests.get(url).json()
     return json_info
 
-#The amount off points you get from one set right now is ten for both Plushies and Flowers but if other sets are added this needs to be changed accordingly
+
+# The amount off points you get from one set right now is ten for both Plushies and Flowers but if other sets are
+# added this needs to be changed accordingly
 point_amount = 10
 
-Plushies = ["Jaguar Plushie", "Lion Plushie", "Panda Plushie", "Monkey Plushie", "Chamois Plushie" , "Wolverine Plushie", "Nessie Plushie", "Red Fox Plushie", "Camel Plushie", "Kitten Plushie", "Teddy Bear Plushie", "Sheep Plushie", "Stingray Plushie"]
+Plushies = ["Jaguar Plushie", "Lion Plushie", "Panda Plushie", "Monkey Plushie", "Chamois Plushie", "Wolverine Plushie",
+            "Nessie Plushie", "Red Fox Plushie", "Camel Plushie", "Kitten Plushie", "Teddy Bear Plushie",
+            "Sheep Plushie", "Stingray Plushie"]
 
-Plushies_Place = ["Mexico","Africa","China","Argentina","Switzerland","Canada","United Kingdom","United Kingdom","United Arabian","Torn","Torn","Torn","Cayman Islands"]
+Plushies_Place = ["Mexico", "Africa", "China", "Argentina", "Switzerland", "Canada", "United Kingdom", "United Kingdom",
+                  "United Arabian", "Torn", "Torn", "Torn", "Cayman Islands"]
 
-Flowers = ["Dahlia","Orchid","African Violet","Cherry Blossom","Peony","Ceibo Flower","Edelweiss","Crocus","Heather","Tribulus Omanense","Banana Orchid"]
+Flowers = ["Dahlia", "Orchid", "African Violet", "Cherry Blossom", "Peony", "Ceibo Flower", "Edelweiss", "Crocus",
+           "Heather", "Tribulus Omanense", "Banana Orchid"]
 
-Coins = ["Leopard Coin", "Florin Coin","Gold Noble Coin"]
+Coins = ["Leopard Coin", "Florin Coin", "Gold Noble Coin"]
 
-#After coins there isn't any real reason to use this program to track the amount of items in your inventory 
-#since you only need to track one but it can still tell you if is worth buying the item on the market for market price. 
+# After coins there isn't any real reason to use this program to track the amount of items in your inventory
+# since you only need to track one but it can still tell you if is worth buying the item on the market for market price.
 
 Buddha = ["Vairocana Buddha Sculpture"]
 
@@ -61,10 +66,11 @@ Amulet = ["Egyptian Amulet"]
 # If anybody knows how to write this better feal free to let me know. 
 # Senet Game not included cuz it will break/make useles half of the program. 
 
-while(True):
+while (True):
 
-
-    choice = input("1. Plushies \n2. Flowers\n3. Medieval Coins\n4. Vairocana Buddha\n5. Ganesha Sculpture\n6. Shabit Sculpture\n7. Script's from the Quran\n8. Egyptian Amulet\n:")
+    choice = input(
+        "1. Plushies \n2. Flowers\n3. Medieval Coins\n4. Vairocana Buddha\n5. Ganesha Sculpture\n6. Shabit "
+        "Sculpture\n7. Script's from the Quran\n8. Egyptian Amulet\n:")
     os.system("clear")
     if choice == "1":
         museum_set = Plushies
@@ -102,11 +108,11 @@ while(True):
         continue
     break
 
-del(choice)
-del(Plushies)
-del(Flowers)
+del (choice)
+del (Plushies)
+del (Flowers)
 
-while(True): #Update loop that refershes every 30 seconds
+while (True):  # Update loop that refershes every 30 seconds
 
     Collectibles = list()
 
@@ -114,27 +120,30 @@ while(True): #Update loop that refershes every 30 seconds
 
     items = get_request("https://api.torn.com/torn/?selections=items&key=" + API_key).get("items")
 
-    for i, collectible in enumerate(museum_set): # Looks for items in you inventory and creates collectible object and adds it in to the list 
+    # Looks for items in you inventory and creates collectible object and adds it in to the list
+    for i, collectible in enumerate(museum_set):
         if collectible in str(inventory):
             for item in inventory:
                 if item.get("name") == collectible:
-                    Collectibles.append(Collectible(collectible,item.get("quantity"),item.get("market_price"),Plushies_Place[i]))
+                    Collectibles.append(
+                        Collectible(collectible, item.get("quantity"), item.get("market_price"), Plushies_Place[i]))
                     pass
-        else: # in case user doesn't have any of the item in the inventory it needs to look up the market price in items API call 
-
+        # In case user doesn't have any of the item in the inventory it needs to look up the market price in items
+        # API call
+        else:
             for item in items:
                 item = items.get(item)
                 if item.get("name") == collectible:
-                    Collectibles.append(Collectible(collectible,0,item.get("market_value"),Plushies_Place[i]))
+                    Collectibles.append(Collectible(collectible, 0, item.get("market_value"), Plushies_Place[i]))
         pass
 
-    del(items)
-    del(inventory)
+    del (items)
+    del (inventory)
 
-    top_amount = 0 #Biggest number of one items users owns 
+    top_amount = 0  # Biggest number of one items users owns
 
-    # With sorting this won't bee needed any more
-    # but that depends if I make sorting optionable or not 
+    # With sorting this won't be needed any more
+    # but that depends on if I make sorting exceptionable or not
 
     for item in Collectibles:
         if item.quantity > top_amount:
@@ -147,23 +156,22 @@ while(True): #Update loop that refershes every 30 seconds
             min_amount = item.quantity
 
     inventory_value = 0
-    
+
     for item in Collectibles:
         inventory_value += item.quantity * item.market_price
-        
 
     change = True
 
-    #This sorts the items from the biggest to the smallest amount in inventory, this makes it usable on windows since they don't suport rgb collors. 
-    #The most basic algorithm for sorting might latter use some more complicated just for fun :D  
+    # This sorts the items from the biggest to the smallest amount in inventory, this makes it usable on windows
+    # since they don't support rgb colors. The most basic algorithm for sorting might latter use some more
+    # complicated just for fun :D
 
-    while(change):
+    while (change):
         change = False
-        for i in range(len(Collectibles)-1):
-            if Collectibles[i].quantity < Collectibles[i+1].quantity:
-                Collectibles[i], Collectibles[i+1] = Collectibles[i+1],Collectibles[i]
+        for i in range(len(Collectibles) - 1):
+            if Collectibles[i].quantity < Collectibles[i + 1].quantity:
+                Collectibles[i], Collectibles[i + 1] = Collectibles[i + 1], Collectibles[i]
                 change = True
-
 
     os.system("clear")
 
@@ -174,81 +182,85 @@ while(True): #Update loop that refershes every 30 seconds
     max_set_cost_market = 0
     current_set_cost_market = 0
 
-    #This si where individual items get printed with there respected color 
+    # This si where individual items get printed with there respected color
     for item in Collectibles:
-        
+
         one_set_cost_market += item.market_price
         max_set_cost_market += item.market_price * top_amount
         current_set_cost_market += item.market_price * min_amount
-        
-        quantity = item.quantity 
+
+        quantity = item.quantity
 
         if quantity == 0:
             one_set_cost_complete += item.market_price
             pass
 
         if quantity != top_amount:
-            max_set_cost_complete += (top_amount-quantity) * item.market_price
+            max_set_cost_complete += (top_amount - quantity) * item.market_price
             pass
-        
 
-        #This part coolors items, the more items users has the more green it gets 
-        #To distinguish items that user doesn't own any there is a big jum in color from 0 to 1 number of items 
+        # This part coolors items, the more items users has the more green it gets
+        # To distinguish items that user doesn't own any there is a big jum in color from 0 to 1 number of items
         R = 0
-        if top_amount != 0 : R = round(144 * (quantity/float(top_amount)))  #144 + 60 for jump + 51 witch is the based = 255 
-        if quantity !=0 : R += 60 # this is the jump
-        c = "\033[38;2;{};{};100m".format(255 - R, 51 + R) #Determines the color, might not work on windows terminal... 
+        if top_amount != 0: R = round(
+            144 * (quantity / float(top_amount)))  # 144 + 60 for jump + 51 witch is the based = 255
+        if quantity != 0: R += 60  # this is the jump
+        c = "\033[38;2;{};{};100m".format(255 - R,
+                                          51 + R)  # Determines the color, might not work on windows terminal...
 
-
-                
-        report = c + "[" + str(quantity) + "]" + item.name + "\033[0m " 
+        report = c + "[" + str(quantity) + "]" + item.name + "\033[0m "
 
         print(report)
 
-    
-    #Grabs the average point value. 
-    point_value = get_request("https://api.torn.com/torn/?selections=stats&key="+API_key).get("stats").get("points_averagecost")
+    # Grabs the average point value.
+    point_value = get_request("https://api.torn.com/torn/?selections=stats&key=" + API_key).get("stats").get(
+        "points_averagecost")
 
     one_set_cost_museum = point_value * point_amount
     max_set_cost_museum = point_value * point_amount * top_amount
     current_set_cost_museum = point_value * point_amount * min_amount
 
-    #Final report 
-    #Just a lot of text to print showing variables 
-    
-    print("\nInventory Value:" +Fore.GREEN+" ${:,}".format(inventory_value))
-    print("Point Price: " +Fore.GREEN + "${:,}".format(point_value))
-    
+    # Final report
+    # Just a lot of text to print showing variables
+
+    print("\nInventory Value:" + Fore.GREEN + " ${:,}".format(inventory_value))
+    print("Point Price: " + Fore.GREEN + "${:,}".format(point_value))
+
     print("\n\nOne set:")
-    print("     Cost to complete:"+Fore.GREEN+" ${:,}".format(one_set_cost_complete))
+    print("     Cost to complete:" + Fore.GREEN + " ${:,}".format(one_set_cost_complete))
     print("     Worth on market: ${:,}".format(one_set_cost_market))
     print("     Worth in museum: ${:,}".format(one_set_cost_museum))
     print("     Worth on M-day:  ${:,}".format(round(one_set_cost_museum * 1.1)))
     difference = one_set_cost_museum - one_set_cost_market
     Mday_difference = round(one_set_cost_museum * 1.1) - one_set_cost_market
-    if difference >= 0: print("     Difference:"+ Fore.GREEN + "  ${:,}".format(difference))
-    else: print("     Difference:"+ Fore.RED + "  ${:,}".format(difference))
+    if difference >= 0:
+        print("     Difference:" + Fore.GREEN + "  ${:,}".format(difference))
+    else:
+        print("     Difference:" + Fore.RED + "  ${:,}".format(difference))
 
-    if Mday_difference >= 0: print("     M-day Diffr:"+ Fore.GREEN + " ${:,}".format(Mday_difference))
-    else: print("     M-day Diffr:"+ Fore.RED + " ${:,}".format(Mday_difference))
-
+    if Mday_difference >= 0:
+        print("     M-day Diffr:" + Fore.GREEN + " ${:,}".format(Mday_difference))
+    else:
+        print("     M-day Diffr:" + Fore.RED + " ${:,}".format(Mday_difference))
 
     print("\nMax set [{}]:".format(top_amount))
-    print("     Cost to complete:"+ Fore.GREEN +" ${:,}".format(max_set_cost_complete))
+    print("     Cost to complete:" + Fore.GREEN + " ${:,}".format(max_set_cost_complete))
     print("     Worth on market: ${:,}".format(max_set_cost_market))
     print("     Worth in museum: ${:,}".format(max_set_cost_museum))
     print("     Worth on M-day:  ${:,}".format(round(max_set_cost_museum * 1.1)))
     difference = max_set_cost_museum - max_set_cost_market
     mday_difference = round(max_set_cost_museum * 1.1) - max_set_cost_market
-    if difference >= 0: print("     Difference:"+ Fore.GREEN + " ${:,}".format(difference))
-    else: print("     Difference:"+ Fore.RED + " ${:,}".format(difference))
+    if difference >= 0:
+        print("     Difference:" + Fore.GREEN + " ${:,}".format(difference))
+    else:
+        print("     Difference:" + Fore.RED + " ${:,}".format(difference))
 
     if mday_difference >= 0:
         print("     M-day Diffr:" + Fore.GREEN + "  ${:,}".format(mday_difference))
     else:
         print("     M-day Diffr:" + Fore.RED + "  ${:,}".format(mday_difference))
 
-    #Current sett is only shown when you can exchange at least one set at the museum 
+    # Current sett is only shown when you can exchange at least one set at the museum
 
     if min_amount != 0:
         print("\nCurrent set [{}] :".format(min_amount))
@@ -257,22 +269,22 @@ while(True): #Update loop that refershes every 30 seconds
         print("     Worth on M-day:  ${:,}".format(round(current_set_cost_museum * 1.1)))
 
         difference = current_set_cost_museum - current_set_cost_market
-        mday_difference = round(current_set_cost_museum*1.1) - current_set_cost_market
+        mday_difference = round(current_set_cost_museum * 1.1) - current_set_cost_market
 
         if difference >= 0:
-            print("     Difference:"+ Fore.GREEN + " ${:,}".format(difference))
+            print("     Difference:" + Fore.GREEN + " ${:,}".format(difference))
         else:
-            print("     Difference:"+ Fore.RED + " ${:,}".format(difference))
+            print("     Difference:" + Fore.RED + " ${:,}".format(difference))
 
         if mday_difference >= 0:
-            print("     M-day Diffr:"+ Fore.GREEN + "  ${:,}".format(mday_difference))
+            print("     M-day Diffr:" + Fore.GREEN + "  ${:,}".format(mday_difference))
         else:
-            print("     M-day Diffr:"+ Fore.RED + "  ${:,}".format(mday_difference))
+            print("     M-day Diffr:" + Fore.RED + "  ${:,}".format(mday_difference))
 
         print("\n https://www.torn.com/museum.php \n")
-    
+
     # updating the table every 30 second
 
     # one update makes total of 3 calls since you get two updates per minute this program takes
     # 6 API calls from the 100 available every minute (that's alright). 
-    time.sleep(30) 
+    time.sleep(30)
