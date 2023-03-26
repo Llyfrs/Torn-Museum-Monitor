@@ -7,7 +7,7 @@ from colorama import init, Fore, Back, Style
 from collections import namedtuple 
 init(autoreset=True)
 
-API_key = "" #Here comes your API key 
+API_key = "" #Here comes your API key
 
 
 
@@ -223,18 +223,30 @@ while(True): #Update loop that refershes every 30 seconds
     print("     Cost to complete:"+Fore.GREEN+" ${:,}".format(one_set_cost_complete))
     print("     Worth on market: ${:,}".format(one_set_cost_market))
     print("     Worth in museum: ${:,}".format(one_set_cost_museum))
+    print("     Worth on M-day:  ${:,}".format(round(one_set_cost_museum * 1.1)))
     difference = one_set_cost_museum - one_set_cost_market
-    if difference >= 0: print("     Difference:"+ Fore.GREEN + " ${:,}".format(difference))
-    else: print("     Difference:"+ Fore.RED + " ${:,}".format(difference))
+    Mday_difference = round(one_set_cost_museum * 1.1) - one_set_cost_market
+    if difference >= 0: print("     Difference:"+ Fore.GREEN + "  ${:,}".format(difference))
+    else: print("     Difference:"+ Fore.RED + "  ${:,}".format(difference))
+
+    if Mday_difference >= 0: print("     M-day Diffr:"+ Fore.GREEN + " ${:,}".format(Mday_difference))
+    else: print("     M-day Diffr:"+ Fore.RED + " ${:,}".format(Mday_difference))
 
 
     print("\nMax set [{}]:".format(top_amount))
     print("     Cost to complete:"+ Fore.GREEN +" ${:,}".format(max_set_cost_complete))
     print("     Worth on market: ${:,}".format(max_set_cost_market))
     print("     Worth in museum: ${:,}".format(max_set_cost_museum))
+    print("     Worth on M-day:  ${:,}".format(round(max_set_cost_museum * 1.1)))
     difference = max_set_cost_museum - max_set_cost_market
+    mday_difference = round(max_set_cost_museum * 1.1) - max_set_cost_market
     if difference >= 0: print("     Difference:"+ Fore.GREEN + " ${:,}".format(difference))
     else: print("     Difference:"+ Fore.RED + " ${:,}".format(difference))
+
+    if mday_difference >= 0:
+        print("     M-day Diffr:" + Fore.GREEN + "  ${:,}".format(mday_difference))
+    else:
+        print("     M-day Diffr:" + Fore.RED + "  ${:,}".format(mday_difference))
 
     #Current sett is only shown when you can exchange at least one set at the museum 
 
@@ -242,9 +254,20 @@ while(True): #Update loop that refershes every 30 seconds
         print("\nCurrent set [{}] :".format(min_amount))
         print("     Worth on market: ${:,}".format(current_set_cost_market))
         print("     Worth in museum: ${:,}".format(current_set_cost_museum))
+        print("     Worth on M-day:  ${:,}".format(round(current_set_cost_museum * 1.1)))
+
         difference = current_set_cost_museum - current_set_cost_market
-        if difference >= 0: print("     Difference:"+ Fore.GREEN + " ${:,}".format(difference))
-        else: print("     Difference:"+ Fore.RED + " ${:,}".format(difference))
+        mday_difference = round(current_set_cost_museum*1.1) - current_set_cost_market
+
+        if difference >= 0:
+            print("     Difference:"+ Fore.GREEN + " ${:,}".format(difference))
+        else:
+            print("     Difference:"+ Fore.RED + " ${:,}".format(difference))
+
+        if mday_difference >= 0:
+            print("     M-day Diffr:"+ Fore.GREEN + "  ${:,}".format(mday_difference))
+        else:
+            print("     M-day Diffr:"+ Fore.RED + "  ${:,}".format(mday_difference))
 
         print("\n https://www.torn.com/museum.php \n")
     
