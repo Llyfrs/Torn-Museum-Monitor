@@ -33,84 +33,78 @@ def get_request(url):  # Code that waits and retryes request when error occurs (
     return json_info
 
 
+def print_set(name: str, set_market_cost: int, set_museum_cost: int, cost_to_complete: int = 0):
+    print(f"\n\n{name}:")
+    if cost_to_complete != 0:
+        print("     Cost to complete:" + Fore.GREEN + " ${:,}".format(cost_to_complete))
+    print("     Worth on market: ${:,}".format(set_market_cost))
+    print("     Worth in museum: ${:,}".format(set_museum_cost))
+    print("     Worth on M-day:  ${:,}".format(round(set_museum_cost * 1.1)))
+    diff = set_museum_cost - set_market_cost
+    mday_diff = round(set_museum_cost * 1.1) - set_market_cost
+    if diff >= 0:
+        print("     Difference:" + Fore.GREEN + "  ${:,}".format(diff))
+    else:
+        print("     Difference:" + Fore.RED + "  ${:,}".format(diff))
+
+    if mday_diff >= 0:
+        print("     M-day Diffr:" + Fore.GREEN + " ${:,}".format(mday_diff))
+    else:
+        print("     M-day Diffr:" + Fore.RED + " ${:,}".format(mday_diff))
+
+    pass
+
+
 # The amount off points you get from one set right now is ten for both Plushies and Flowers but if other sets are
 # added this needs to be changed accordingly
 point_amount = 10
 
-Plushies = ["Jaguar Plushie", "Lion Plushie", "Panda Plushie", "Monkey Plushie", "Chamois Plushie", "Wolverine Plushie",
-            "Nessie Plushie", "Red Fox Plushie", "Camel Plushie", "Kitten Plushie", "Teddy Bear Plushie",
-            "Sheep Plushie", "Stingray Plushie"]
+sets = list()
+
+sets.append(
+    ["Jaguar Plushie", "Lion Plushie", "Panda Plushie", "Monkey Plushie", "Chamois Plushie", "Wolverine Plushie",
+     "Nessie Plushie", "Red Fox Plushie", "Camel Plushie", "Kitten Plushie", "Teddy Bear Plushie",
+     "Sheep Plushie", "Stingray Plushie"])
 
 Plushies_Place = ["Mexico", "Africa", "China", "Argentina", "Switzerland", "Canada", "United Kingdom", "United Kingdom",
                   "United Arabian", "Torn", "Torn", "Torn", "Cayman Islands"]
 
-Flowers = ["Dahlia", "Orchid", "African Violet", "Cherry Blossom", "Peony", "Ceibo Flower", "Edelweiss", "Crocus",
-           "Heather", "Tribulus Omanense", "Banana Orchid"]
+sets.append(["Dahlia", "Orchid", "African Violet", "Cherry Blossom", "Peony", "Ceibo Flower", "Edelweiss", "Crocus",
+             "Heather", "Tribulus Omanense", "Banana Orchid"])
 
-Coins = ["Leopard Coin", "Florin Coin", "Gold Noble Coin"]
+sets.append(["Leopard Coin", "Florin Coin", "Gold Noble Coin"])
 
-# After coins there isn't any real reason to use this program to track the amount of items in your inventory
-# since you only need to track one but it can still tell you if is worth buying the item on the market for market price.
+# After coins there isn't any real reason to use this program to track the amount of items in your inventory since
+# you only need to track one, but it can still tell you if is worth buying the item on the market for market price.
 
-Buddha = ["Vairocana Buddha Sculpture"]
+sets.append(["Vairocana Buddha Sculpture"])
+sets.append(["Ganesha Sculpture"])
+sets.append(["Shabti Sculpture"])
+sets.append(["Quran Script : Ibn Masud", "Quran Script : Ubay Ibn Kab", "Quran Script : Ali"])
+sets.append(["Egyptian Amulet"])
 
-Ganesha = ["Ganesha Sculpture"]
-
-Shabit = ["Shabti Sculpture"]
-
-Scripts = ["Quran Script : Ibn Masud", "Quran Script : Ubay Ibn Kab", "Quran Script : Ali"]
-
-Amulet = ["Egyptian Amulet"]
+sets_rewards = [10, 10, 100, 100, 250, 500, 1000, 10000]
 
 # Choosing witch set you want to monitor.
 # If anybody knows how to write this better feal free to let me know. 
 # Senet Game not included cuz it will break/make useles half of the program. 
 
 while (True):
-
     choice = input(
         "1. Plushies \n2. Flowers\n3. Medieval Coins\n4. Vairocana Buddha\n5. Ganesha Sculpture\n6. Shabit "
         "Sculpture\n7. Script's from the Quran\n8. Egyptian Amulet\n:")
+
+    choice = int(choice)
     os.system("clear")
-    if choice == "1":
-        museum_set = Plushies
-        pass
-    elif choice == "2":
-        museum_set = Flowers
-        pass
-    elif choice == "3":
-        museum_set = Coins
-        point_amount = 100
-        pass
-    elif choice == "4":
-        museum_set = Buddha
-        point_amount = 100
-        pass
-    elif choice == "5":
-        museum_set = Ganesha
-        point_amount = 250
-        pass
-    elif choice == "6":
-        museum_set = Shabit
-        point_amount = 500
-        pass
-    elif choice == "7":
-        museum_set = Scripts
-        point_amount = 1000
-        pass
-    elif choice == "8":
-        museum_set = Amulet
-        point_amount = 10000
-        pass
+    if 0 < choice < 9:
+        museum_set = sets[choice - 1]
+        point_amount = sets_rewards[choice - 1]
+
     else:
         print("{} is not recognized as a vallid input".format(choice))
         print("Pleas try again\n")
         continue
     break
-
-del (choice)
-del (Plushies)
-del (Flowers)
 
 while (True):  # Update loop that refershes every 30 seconds
 
@@ -140,7 +134,7 @@ while (True):  # Update loop that refershes every 30 seconds
     del (items)
     del (inventory)
 
-    top_amount = 0  # Biggest number of one items users owns
+    top_amount = 0  # Biggest number of one item's users owns
 
     # With sorting this won't be needed any more
     # but that depends on if I make sorting exceptionable or not
@@ -226,61 +220,15 @@ while (True):  # Update loop that refershes every 30 seconds
     print("\nInventory Value:" + Fore.GREEN + " ${:,}".format(inventory_value))
     print("Point Price: " + Fore.GREEN + "${:,}".format(point_value))
 
-    print("\n\nOne set:")
-    print("     Cost to complete:" + Fore.GREEN + " ${:,}".format(one_set_cost_complete))
-    print("     Worth on market: ${:,}".format(one_set_cost_market))
-    print("     Worth in museum: ${:,}".format(one_set_cost_museum))
-    print("     Worth on M-day:  ${:,}".format(round(one_set_cost_museum * 1.1)))
-    difference = one_set_cost_museum - one_set_cost_market
-    Mday_difference = round(one_set_cost_museum * 1.1) - one_set_cost_market
-    if difference >= 0:
-        print("     Difference:" + Fore.GREEN + "  ${:,}".format(difference))
-    else:
-        print("     Difference:" + Fore.RED + "  ${:,}".format(difference))
+    print_set("One set", one_set_cost_market, one_set_cost_museum, one_set_cost_complete)
 
-    if Mday_difference >= 0:
-        print("     M-day Diffr:" + Fore.GREEN + " ${:,}".format(Mday_difference))
-    else:
-        print("     M-day Diffr:" + Fore.RED + " ${:,}".format(Mday_difference))
-
-    print("\nMax set [{}]:".format(top_amount))
-    print("     Cost to complete:" + Fore.GREEN + " ${:,}".format(max_set_cost_complete))
-    print("     Worth on market: ${:,}".format(max_set_cost_market))
-    print("     Worth in museum: ${:,}".format(max_set_cost_museum))
-    print("     Worth on M-day:  ${:,}".format(round(max_set_cost_museum * 1.1)))
-    difference = max_set_cost_museum - max_set_cost_market
-    mday_difference = round(max_set_cost_museum * 1.1) - max_set_cost_market
-    if difference >= 0:
-        print("     Difference:" + Fore.GREEN + " ${:,}".format(difference))
-    else:
-        print("     Difference:" + Fore.RED + " ${:,}".format(difference))
-
-    if mday_difference >= 0:
-        print("     M-day Diffr:" + Fore.GREEN + "  ${:,}".format(mday_difference))
-    else:
-        print("     M-day Diffr:" + Fore.RED + "  ${:,}".format(mday_difference))
-
+    # Max Set
+    print_set("Max set [{}]".format(top_amount), max_set_cost_market, max_set_cost_museum, max_set_cost_complete)
     # Current sett is only shown when you can exchange at least one set at the museum
 
     if min_amount != 0:
-        print("\nCurrent set [{}] :".format(min_amount))
-        print("     Worth on market: ${:,}".format(current_set_cost_market))
-        print("     Worth in museum: ${:,}".format(current_set_cost_museum))
-        print("     Worth on M-day:  ${:,}".format(round(current_set_cost_museum * 1.1)))
 
-        difference = current_set_cost_museum - current_set_cost_market
-        mday_difference = round(current_set_cost_museum * 1.1) - current_set_cost_market
-
-        if difference >= 0:
-            print("     Difference:" + Fore.GREEN + " ${:,}".format(difference))
-        else:
-            print("     Difference:" + Fore.RED + " ${:,}".format(difference))
-
-        if mday_difference >= 0:
-            print("     M-day Diffr:" + Fore.GREEN + "  ${:,}".format(mday_difference))
-        else:
-            print("     M-day Diffr:" + Fore.RED + "  ${:,}".format(mday_difference))
-
+        print_set("Current set [{}] :".format(min_amount), current_set_cost_market, current_set_cost_museum)
         print("\n https://www.torn.com/museum.php \n")
 
     # updating the table every 30 second
