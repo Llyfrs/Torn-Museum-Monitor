@@ -22,15 +22,15 @@ if API_key == "":  # In case user doesn't want to edit code.
 Collectible = namedtuple('Collectible', ['name', 'quantity', 'market_price', 'place'], defaults=(None,))
 
 
-def get_request(url):  # Code that waits and retryes request when error occurs (most comonly running out off AP calls)
-    json_info = requests.get(url).json()
-
+def get_request(url):
     while True:
-        if json_info.get("error") == None:
-            break
-        time.sleep(5)
-        json_info = requests.get(url).json()
-    return json_info
+        try:
+            json_info = requests.get(url).json()
+            if not json_info.get("error"):
+                return json_info
+        except requests.exceptions.RequestException as e:
+            print(e)
+            time.sleep(5)
 
 
 def print_set(name: str, set_market_cost: int, set_museum_cost: int, cost_to_complete: int = 0):
@@ -101,7 +101,7 @@ while (True):
         point_amount = sets_rewards[choice - 1]
 
     else:
-        print("{} is not recognized as a vallid input".format(choice))
+        print(f"{choice} is not recognized as a valid input")
         print("Pleas try again\n")
         continue
     break
